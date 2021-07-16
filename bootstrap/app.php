@@ -23,7 +23,8 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-// $app->withFacades();
+$app->withFacades();
+// $app->configure('swagger-lume');
 
 // $app->withEloquent();
 
@@ -47,6 +48,8 @@ $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
     App\Console\Kernel::class
 );
+
+// $app->register(\SwaggerLume\ServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -116,5 +119,7 @@ $app->router->group([
 $app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
 
 $app->withEloquent();
+
+$app->configure('database');
 
 return $app;

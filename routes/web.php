@@ -2,7 +2,8 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
-$router->get('/', function () use ($router) {
-    $books = \App\Models\Book::all();
-    return response($books);
-});
+$router->get('/', 'BookController@index');
+$router->get('/{id}', 'BookController@show');
+$router->post('/', 'BookController@store');
+$router->put('/{id}', 'BookController@update');
+$router->delete('/{id}', 'BookController@delete');

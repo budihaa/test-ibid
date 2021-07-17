@@ -6,6 +6,7 @@ use App\Traits\ApiResponseTrait;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class BookController extends Controller
 {
@@ -25,7 +26,7 @@ class BookController extends Controller
     {
         $book = Book::find($id);
         if (!$book) {
-            return $this->respondNoContent(['message' => '']);
+            return $this->respondNotFound();
         }
 
         return $this->apiResponse([
@@ -37,36 +38,50 @@ class BookController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make(
-            [
-                'name' => $request->name,
-            ],
-            [
-                'ip' => 'required|ip'
-            ]
-        );
-
+        $rules = [
+            'name' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return $this->respondValidationErrors($validator->errors());
+            return $this->respondValidationErrors(new ValidationException($validator));
         }
 
         $book = Book::create(['name' => $request->name]);
-        return response($book);
+        return $this->respondCreated([
+            'success' => true,
+            'message' => 'Book Created',
+            'result' => $book
+        ]);
     }
 
     public function update(Request $request, $id)
     {
-        $validatedData = $this->validate($request, [
+        $rules = [
             'name' => 'required',
-        ]);
+        ];
+        $validator = Validator::make($request->all(), $rules);
 
-        $book = Book::find($id)->update($validatedData);
-        return response($book);
+        if ($validator->fails()) {
+            return $this->respondValidationErrors(new ValidationException($validator));
+        }
+
+        $book = Book::find($id)->update(['name' => $request->name]);
+        return $this->respondCreated([
+            'success' => true,
+            'message' => 'Book Updated',
+            'result' => $book
+        ]);
     }
 
     public function delete($id)
     {
-        $books = Book::find($id)->delete();
-        return response($books);
+        $book = Book::find($id);
+        if (!$book) {
+            return $this->respondNotFound();
+        }
+
+        $book->delete();
+
+        return $this->apiResponse([], 204);
     }
 }

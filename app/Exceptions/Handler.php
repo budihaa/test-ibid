@@ -4,7 +4,11 @@ namespace App\Exceptions;
 
 use App\Traits\ApiResponseTrait;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\Exceptions\PostTooLargeException;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -49,7 +53,7 @@ class Handler extends ExceptionHandler
     public function report(Throwable $exception)
     {
         $ignoreable_exception_messages = ['Unauthenticated or Token Expired, Please Login'];
-        //        $ignoreable_exception_messages[] = 'The refresh token is invalid.';
+        // $ignoreable_exception_messages[] = 'The refresh token is invalid.';
         $ignoreable_exception_messages[] = 'The resource owner or authorization server denied the request.';
         if (app()->bound('sentry') && $this->shouldReport($exception)) {
             if (!in_array($exception->getMessage(), $ignoreable_exception_messages)) {
@@ -91,6 +95,7 @@ class Handler extends ExceptionHandler
                     401
                 );
             }
+
             if ($exception instanceof ThrottleRequestsException) {
                 return $this->apiResponse(
                     [
@@ -100,6 +105,7 @@ class Handler extends ExceptionHandler
                     429
                 );
             }
+
             if ($exception instanceof ModelNotFoundException) {
                 return $this->apiResponse(
                     [
@@ -109,8 +115,8 @@ class Handler extends ExceptionHandler
                     404
                 );
             }
-            if ($exception instanceof ValidationException) {
 
+            if ($exception instanceof ValidationException) {
                 return $this->apiResponse(
                     [
                         'success' => false,
@@ -120,8 +126,8 @@ class Handler extends ExceptionHandler
                     422
                 );
             }
-            if ($exception instanceof QueryException) {
 
+            if ($exception instanceof QueryException) {
                 return $this->apiResponse(
                     [
                         'success' => false,
@@ -132,6 +138,7 @@ class Handler extends ExceptionHandler
                     500
                 );
             }
+
             // if ($exception instanceof HttpResponseException) {
             //     // $exception = $exception->getResponse();
             //     return $this->apiResponse(

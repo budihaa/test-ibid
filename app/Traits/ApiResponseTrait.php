@@ -285,9 +285,22 @@ trait ApiResponseTrait
             [
                 'success' => false,
                 'message' => $exception->getMessage(),
-                'errors' => $exception->errors()
+                'errors' => $this->transformErrors($exception->errors())
             ],
             422
         );
+    }
+
+    private function transformErrors($exceptionErrors)
+    {
+        $errors = [];
+        foreach ($exceptionErrors as $field => $message) {
+            $errors[] = [
+                'field' => $field,
+                'message' => $message[0],
+            ];
+        }
+
+        return $errors;
     }
 }

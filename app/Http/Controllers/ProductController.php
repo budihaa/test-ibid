@@ -15,7 +15,6 @@ class ProductController extends Controller
     public function index()
     {
         $firestore = app('firebase.firestore');
-
         echo '<pre>';
         print_r($firestore);
         echo '<pre>';

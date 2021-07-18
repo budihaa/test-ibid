@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
@@ -26,8 +26,7 @@ $app = new Laravel\Lumen\Application(
 $app->register(Kreait\Laravel\Firebase\ServiceProvider::class);
 
 $app->withFacades();
-
-// $app->configure('swagger-lume');
+$app->configure('swagger-lume');
 
 // $app->withEloquent();
 
@@ -52,7 +51,7 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
-// $app->register(\SwaggerLume\ServiceProvider::class);
+$app->register(\SwaggerLume\ServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +65,7 @@ $app->singleton(
 */
 
 $app->configure('app');
+$app->configure('jwt');
 
 /*
 |--------------------------------------------------------------------------
@@ -82,9 +82,9 @@ $app->configure('app');
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+$app->routeMiddleware([
+    'auth' => App\Http\Middleware\Authenticate::class,
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -98,7 +98,8 @@ $app->configure('app');
 */
 
 // $app->register(App\Providers\AppServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
+$app->register(App\Providers\AuthServiceProvider::class);
+$app->register(Illuminate\Mail\MailServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
 /*
@@ -115,8 +116,12 @@ $app->configure('app');
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
-    require __DIR__.'/../routes/web.php';
+    require __DIR__ . '/../routes/web.php';
 });
+
+$app->register('Sentry\Laravel\ServiceProvider');
+
+$app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 
 // Lumen Mongo Setup
 $app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
@@ -124,5 +129,14 @@ $app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
 $app->withEloquent();
 
 $app->configure('database');
+$app->configure('mail');
+$app->configure('services');
+
+// $app->alias('mail.manager', Illuminate\Mail\MailManager::class);
+// $app->alias('mail.manager', Illuminate\Contracts\Mail\Factory::class);
+
+// $app->alias('mailer', Illuminate\Mail\Mailer::class);
+// $app->alias('mailer', Illuminate\Contracts\Mail\Mailer::class);
+// $app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
 
 return $app;

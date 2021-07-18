@@ -83,3 +83,68 @@ class AuthResReqController extends Controller
         }
     }
 }
+
+/**
+ * @OA\Post(
+ * path="/api/resreq-login",
+ * summary="Sign in",
+ * description="Login by email, password",
+ * operationId="authLoginRes",
+ * tags={"Authentication resreq.in (Soal no. 6)"},
+ * @OA\RequestBody(
+ *    required=true,
+ *    description="Email and Password Credential",
+ *    @OA\JsonContent(
+ *       required={"email","password"},
+ *       @OA\Property(property="email", type="string", format="email", example="eve.holt@reqres.in"),
+ *       @OA\Property(property="password", type="string", format="password", example="cityslicka"),
+ *    ),
+ * ),
+ * @OA\Response(
+ *   response="200",
+ *   description="Return Token",
+ *   @OA\JsonContent(
+ *      @OA\Property(property="token", type="string", example="QpwL5tke4Pnpja7X4"),
+ *   )
+ * ),
+ * @OA\Response(
+ *    response=400,
+ *    description="Credentials not found",
+ *    @OA\JsonContent(
+ *       @OA\Property(property="error", type="string", example="user not found"),
+ *    )
+ *  ),
+ * )
+ */
+
+ /**
+ * @OA\Post(
+ * path="/api/resreq-register",
+ * summary="Register",
+ * description="Register using email, and password",
+ * operationId="authRegisterRes",
+ * tags={"Authentication resreq.in (Soal no. 6)"},
+ * @OA\RequestBody(
+ *    required=true,
+ *    description="Email and Password",
+ *    @OA\JsonContent(
+ *       required={"email","name","password"},
+ *       @OA\Property(property="email", type="string", format="email", example="eve.holt@reqres.in"),
+ *       @OA\Property(property="password", type="string", format="password", example="pistol"),
+ *    ),
+ * ),
+ * @OA\Response(
+ *   response="200",
+ *   description="Return Token",
+ *   @OA\JsonContent(
+ *      @OA\Property(property="id", type="integer", example="1"),
+ *      @OA\Property(property="token", type="string", example="QpwL5tke4Pnpja7X4"),
+ *   )
+ * ),
+ * @OA\Response(
+ *    response=400,
+ *    description="Only defined users succeed registration",
+ *      @OA\Property(property="error", type="string", example="Note: Only defined users succeed registration"),
+ *     )
+ * )
+ */

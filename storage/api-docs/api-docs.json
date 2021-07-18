@@ -1,35 +1,541 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Example API",
+        "title": "Test IBID API",
         "contact": {
-            "name": "Support Team",
-            "email": "support@example.com"
+            "name": "Budi Haryono",
+            "email": "budiharyono4@gmail.com"
         },
         "version": "1.0"
     },
     "paths": {
-        "/sample/{category}/things": {
-            "get": {
+        "/api/login": {
+            "post": {
                 "tags": [
-                    "yourtag"
+                    "Authentication (Soal no. 2)"
                 ],
-                "operationId": "/sample/category/things",
-                "parameters": [
-                    {
-                        "name": "category",
-                        "in": "path",
-                        "description": "The category parameter in path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
+                "summary": "Sign in",
+                "description": "Login by email, password",
+                "operationId": "authLogin",
+                "requestBody": {
+                    "description": "Email and Password Credential",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "asdf@zxcv.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "123asd"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return JWT Token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "auth_token": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjI2NTk2MjQ5LCJleHAiOjE2MjkyMjQyNDksIm5iZiI6MTYyNjU5NjI0OSwianRpIjoiWGlrczhCQjJrbGdxSkFyTiIsInN1YiI6IjYwZjJhODM3OTZlYTczMWJkZjA4ZmNmOSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.pFNfya7fcSXkyuOZ-obxSyJLSdt8uiYAvKkYiHEEIrg"
+                                        },
+                                        "token_type": {
+                                            "type": "string",
+                                            "example": "bearer"
+                                        },
+                                        "expires_in": {
+                                            "type": "string",
+                                            "example": "43800"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
                         }
                     },
+                    "401": {
+                        "description": "Credentials not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Email or Password not found"
+                                        },
+                                        "result": {
+                                            "type": "null",
+                                            "example": "null"
+                                        },
+                                        "error_code": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "result": {
+                                            "type": "null",
+                                            "example": "null"
+                                        },
+                                        "error_code": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        },
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": "The email field is required."
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "The password field is required."
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "field": "email",
+                                                    "message": "The email input is required."
+                                                },
+                                                {
+                                                    "field": "password",
+                                                    "message": "The email input is required."
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Authentication (Soal no. 2)"
+                ],
+                "summary": "Register",
+                "description": "Register using email, name, password",
+                "operationId": "authRegister",
+                "requestBody": {
+                    "description": "Email and Password Credential",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "name",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "budi@domain.com"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Budi Haryono"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "123asd"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return JWT Token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "auth_token": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjI2NTk2MjQ5LCJleHAiOjE2MjkyMjQyNDksIm5iZiI6MTYyNjU5NjI0OSwianRpIjoiWGlrczhCQjJrbGdxSkFyTiIsInN1YiI6IjYwZjJhODM3OTZlYTczMWJkZjA4ZmNmOSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.pFNfya7fcSXkyuOZ-obxSyJLSdt8uiYAvKkYiHEEIrg"
+                                        },
+                                        "token_type": {
+                                            "type": "string",
+                                            "example": "bearer"
+                                        },
+                                        "expires_in": {
+                                            "type": "string",
+                                            "example": "43800"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "result": {
+                                            "type": "null",
+                                            "example": "null"
+                                        },
+                                        "error_code": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        },
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": "The email field is required."
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "The password field is required."
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "field": "email",
+                                                    "message": "The email input is required."
+                                                },
+                                                {
+                                                    "field": "password",
+                                                    "message": "The email input is required."
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Authentication (Soal no. 2)"
+                ],
+                "summary": "Logout",
+                "description": "Logout user and invalidate token",
+                "operationId": "authLogout",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successfully logged out"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    }
+                },
+                "security": [
                     {
-                        "name": "criteria",
-                        "in": "query",
-                        "description": "Some optional other parameter",
-                        "required": false,
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/resreq-login": {
+            "post": {
+                "tags": [
+                    "Authentication resreq.in (Soal no. 6)"
+                ],
+                "summary": "Sign in",
+                "description": "Login by email, password",
+                "operationId": "authLoginRes",
+                "requestBody": {
+                    "description": "Email and Password Credential",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "eve.holt@reqres.in"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "cityslicka"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return Token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "QpwL5tke4Pnpja7X4"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Credentials not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "user not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/resreq-register": {
+            "post": {
+                "tags": [
+                    "Authentication resreq.in (Soal no. 6)"
+                ],
+                "summary": "Register",
+                "description": "Register using email, and password",
+                "operationId": "authRegisterRes",
+                "requestBody": {
+                    "description": "Email and Password",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "name",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "eve.holt@reqres.in"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "pistol"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return Token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "QpwL5tke4Pnpja7X4"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Only defined users succeed registration"
+                    }
+                }
+            }
+        },
+        "/api/books": {
+            "get": {
+                "tags": [
+                    "Books API Endpoint (Soal no. 1)"
+                ],
+                "summary": "Returns all books",
+                "operationId": "/api/books",
+                "responses": {
+                    "200": {
+                        "description": "Success Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "All Books"
+                                        },
+                                        "result": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "_id": {
+                                                        "type": "string",
+                                                        "example": "60f28b0ceb22744a8f128df2"
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Manusia Setengah Salmon"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "date",
+                                                        "example": "2021-07-18T02:28:28.833000Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "date",
+                                                        "example": "2021-07-18T02:28:28.833000Z"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "_id": "60f28b0ceb22744a8f128df2",
+                                                    "name": "Manusia Setengah Salmon",
+                                                    "created_at": "2021-07-18T02:28:28.833000Z",
+                                                    "updated_at": "2021-07-18T02:28:28.833000Z"
+                                                },
+                                                {
+                                                    "_id": "60f29f3896ea731bdf08fcf2",
+                                                    "name": "Zxcvasdf",
+                                                    "updated_at": "2021-07-17T09:13:27.173000Z",
+                                                    "created_at": "2021-07-17T09:13:27.173000Z"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/books/{id}": {
+            "get": {
+                "tags": [
+                    "Books API Endpoint (Soal no. 1)"
+                ],
+                "summary": "Fetch a book by ID",
+                "operationId": "/api/books/id",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of book to return",
+                        "required": true,
                         "schema": {
                             "type": "string"
                         }
@@ -37,17 +543,890 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns some sample category things",
+                        "description": "Success response",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "All Books"
+                                        },
+                                        "result": {
+                                            "type": "object",
+                                            "example": {
+                                                "_id": "60f28b0ceb22744a8f128df2",
+                                                "name": "Manusia Setengah Salmon",
+                                                "created_at": "2021-07-18T02:28:28.833000Z",
+                                                "updated_at": "2021-07-18T02:28:28.833000Z"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         }
                     },
-                    "400": {
-                        "description": "Error: Bad request. When required parameters were not supplied."
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+                    "404": {
+                        "description": "Resource not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Not Found"
+                                        },
+                                        "result": {
+                                            "type": "null",
+                                            "example": "null"
+                                        },
+                                        "error_code": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Books API Endpoint (Soal no. 1)"
+                ],
+                "summary": "Update book",
+                "operationId": "/api/books/update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of book to update",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Book Name",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Book Created"
+                                        },
+                                        "result": {
+                                            "type": "object",
+                                            "example": {
+                                                "_id": "60f28b0ceb22744a8f128df2",
+                                                "name": "Manusia Setengah Salmon",
+                                                "created_at": "2021-07-18T02:28:28.833000Z",
+                                                "updated_at": "2021-07-18T02:28:28.833000Z"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+                    "404": {
+                        "description": "Resource not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Not Found"
+                                        },
+                                        "result": {
+                                            "type": "null",
+                                            "example": "null"
+                                        },
+                                        "error_code": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Not Found"
+                                        },
+                                        "result": {
+                                            "type": "null",
+                                            "example": "null"
+                                        },
+                                        "error_code": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        },
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": "The name field is required."
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "field": "name",
+                                                    "message": "The name input is required."
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Books API Endpoint (Soal no. 1)"
+                ],
+                "summary": "Delete a book by ID",
+                "operationId": "deletePet",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of book to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Success response"
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+                    "404": {
+                        "description": "Resource not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Not Found"
+                                        },
+                                        "result": {
+                                            "type": "null",
+                                            "example": "null"
+                                        },
+                                        "error_code": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/books/": {
+            "post": {
+                "tags": [
+                    "Books API Endpoint (Soal no. 1)"
+                ],
+                "summary": "Create new book",
+                "operationId": "/api/books/",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Book Name",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Book Created"
+                                        },
+                                        "result": {
+                                            "type": "object",
+                                            "example": {
+                                                "_id": "60f28b0ceb22744a8f128df2",
+                                                "name": "Manusia Setengah Salmon",
+                                                "created_at": "2021-07-18T02:28:28.833000Z",
+                                                "updated_at": "2021-07-18T02:28:28.833000Z"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+                    "422": {
+                        "description": "Input validation errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Not Found"
+                                        },
+                                        "result": {
+                                            "type": "null",
+                                            "example": "null"
+                                        },
+                                        "error_code": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        },
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": "The name field is required."
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "field": "name",
+                                                    "message": "The name input is required."
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/send-email": {
+            "post": {
+                "tags": [
+                    "Send Email with Mailgun (Soal no. 10)"
+                ],
+                "summary": "Destination email need to registered first in Authorized Recipients in Mailgun",
+                "description": "Input destination email",
+                "operationId": "sendemail",
+                "requestBody": {
+                    "description": "Email",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "name",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "budiharyono4@gmail.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return Token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "QpwL5tke4Pnpja7X4"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
+            }
+        },
+        "/api/products": {
+            "get": {
+                "tags": [
+                    "Products API Endpoint (Soal no. 3 )"
+                ],
+                "summary": "Returns all products",
+                "operationId": "/api/products",
+                "responses": {
+                    "200": {
+                        "description": "Success Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "All products"
+                                        },
+                                        "result": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "DF2yxPnSIhxggzMZv7kf"
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Indomie"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "id": "114eb06346dd48c48c5a",
+                                                    "name": "Kopi Kapal Api"
+                                                },
+                                                {
+                                                    "id": "DF2yxPnSIhxggzMZv7kf",
+                                                    "name": "Indomie"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    }
+                }
+            }
+        },
+        "/api/products/{id}": {
+            "get": {
+                "tags": [
+                    "Products API Endpoint (Soal no. 3 )"
+                ],
+                "summary": "Fetch a product by ID",
+                "operationId": "/api/products/id",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of product to return",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "All products"
+                                        },
+                                        "result": {
+                                            "type": "object",
+                                            "example": {
+                                                "id": "DF2yxPnSIhxggzMZv7kf",
+                                                "name": "Indomie"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+                    "404": {
+                        "description": "Resource not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Not Found"
+                                        },
+                                        "result": {
+                                            "type": "null",
+                                            "example": "null"
+                                        },
+                                        "error_code": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Products API Endpoint (Soal no. 3 )"
+                ],
+                "summary": "Update product",
+                "operationId": "/api/products/update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of product to update",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Product Name",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Product Created"
+                                        },
+                                        "result": {
+                                            "type": "object",
+                                            "example": {
+                                                "id": "DF2yxPnSIhxggzMZv7kf",
+                                                "name": "Indomie"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+                    "404": {
+                        "description": "Resource not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Not Found"
+                                        },
+                                        "result": {
+                                            "type": "null",
+                                            "example": "null"
+                                        },
+                                        "error_code": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Not Found"
+                                        },
+                                        "result": {
+                                            "type": "null",
+                                            "example": "null"
+                                        },
+                                        "error_code": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        },
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": "The name field is required."
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "field": "name",
+                                                    "message": "The name input is required."
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Products API Endpoint (Soal no. 3 )"
+                ],
+                "summary": "Delete a product by ID",
+                "operationId": "deletePet",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of product to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Success response"
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+                    "404": {
+                        "description": "Resource not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Not Found"
+                                        },
+                                        "result": {
+                                            "type": "null",
+                                            "example": "null"
+                                        },
+                                        "error_code": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/products/": {
+            "post": {
+                "tags": [
+                    "Products API Endpoint (Soal no. 3 )"
+                ],
+                "summary": "Create new product",
+                "operationId": "/api/products/",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Product Name",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Product Created"
+                                        },
+                                        "result": {
+                                            "type": "object",
+                                            "example": {
+                                                "id": "DF2yxPnSIhxggzMZv7kf",
+                                                "name": "Indomie"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+                    "422": {
+                        "description": "Input validation errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Not Found"
+                                        },
+                                        "result": {
+                                            "type": "null",
+                                            "example": "null"
+                                        },
+                                        "error_code": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        },
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": "The name field is required."
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "field": "name",
+                                                    "message": "The name input is required."
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "bearerAuth",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
             }
         }
     }

@@ -1,7 +1,7 @@
 <html>
 
 <body>
-    <h1>Test</h1>
+    <h1>Send email with Mailgun success!</h1>
 </body>
 
 </html>

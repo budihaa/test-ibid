@@ -10,12 +10,13 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('/books/', 'BookController@store');
         $router->put('/books/{id}', 'BookController@update');
         $router->delete('/books/{id}', 'BookController@delete');
+
+        $router->post('/logout', 'AuthController@logout');
     });
 
     // Soal 2
     $router->post('/login', 'AuthController@login');
     $router->post('/register', 'AuthController@register');
-    $router->post('/logout', 'AuthController@logout');
 
     // Soal 3
     $router->get('/products', 'ProductController@index');
@@ -31,11 +32,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
 // Soal 7
 $router->get('/filter', 'ArrayController@index');
-
-// Soal 9
-$router->get('/debug-sentry', function () {
-    throw new Exception('My second Sentry error!');
-});
 
 // Soal 10
 $router->post('/send-email', 'EmailController@index');

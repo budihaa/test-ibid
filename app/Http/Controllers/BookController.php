@@ -115,7 +115,7 @@ class BookController extends Controller
 
         return $this->apiResponse([
             'success' => true,
-            'message' => 'Book Updated',
+            'message' => 'Deleted Book',
         ], 204);
     }
 }

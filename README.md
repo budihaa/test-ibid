@@ -14,9 +14,9 @@ sudo pecl install mongod
 sudo pecl install grpc
 sudo pecl install protobuf
 ```
-4. Jalanan kan composer dengan command
+4. Install composer dengan command
 ```composer install --ignore-platform-reqs```
 
 # Notes
 1. Beberapa jawaban untuk membuat API Endpoint ada file ```routes/web.php```
-2. Untuk **Unit Test** tinggal menjalankan command ```composer test```
+2. Untuk **Unit Test** gunakan command ```composer test```

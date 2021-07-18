@@ -3,7 +3,6 @@
 namespace App\Exceptions;
 
 use App\Traits\ApiResponseTrait;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
@@ -11,7 +10,6 @@ use Illuminate\Http\Exceptions\PostTooLargeException;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -137,18 +135,6 @@ class Handler extends ExceptionHandler
                     500
                 );
             }
-
-            // if ($exception instanceof HttpResponseException) {
-            //     // $exception = $exception->getResponse();
-            //     return $this->apiResponse(
-            //         [
-            //             'success' => false,
-            //             'message' => "There was some internal error",
-            //             'exception'  => $exception
-            //         ],
-            //         500
-            //     );
-            // }
 
             if ($exception instanceof \Error) {
                 // $exception = $exception->getResponse();

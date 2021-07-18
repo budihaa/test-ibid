@@ -3,15 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Mail\SendEmail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class EmailController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $email = Mail::to('budiharyono4@gmail.com')->send(new SendEmail());
-        echo '<pre>';
-        print_r($email);
-        echo '<pre>';
+        $email = Mail::to($request->email)->send(new SendEmail());
+        echo 'Email sent successfully';
     }
 }

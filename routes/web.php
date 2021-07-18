@@ -3,7 +3,7 @@
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 $router->group(['prefix' => 'api'], function () use ($router) {
-    $router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->group(['middleware' => 'auth:api'], function () use ($router) {
         // Soal 1
         $router->get('/books', 'BookController@index');
         $router->get('/books/{id}', 'BookController@show');
@@ -19,6 +19,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     // Soal 3
     $router->get('/products', 'ProductController@index');
+    $router->get('/products/{id}', 'ProductController@show');
+    $router->post('/products/', 'ProductController@store');
+    $router->put('/products/{id}', 'ProductController@update');
+    $router->delete('/products/{id}', 'ProductController@delete');
+
+    // Soal 6
+    $router->post('/resreq-login', 'AuthResReqController@login');
+    $router->post('/resreq-register', 'AuthResReqController@register');
 });
 
 // Soal 7
@@ -30,4 +38,4 @@ $router->get('/debug-sentry', function () {
 });
 
 // Soal 10
-$router->get('/send-email', 'EmailController@index');
+$router->post('/send-email', 'EmailController@index');

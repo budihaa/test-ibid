@@ -26,7 +26,13 @@ class AuthController extends Controller
         $credentials = $request->only(['email', 'password']);
 
         if (!$token = auth()->attempt($credentials)) {
-            return $this->respondUnAuthorized();
+            return $this->apiResponse(
+                [
+                    'success' => false,
+                    'message' => 'Email or Password not found'
+                ],
+                401
+            );
         }
 
         return $this->respondWithToken($token);
@@ -72,7 +78,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => 0
+            'expires_in' => env('JWT_TTL')
         ]);
     }
 }

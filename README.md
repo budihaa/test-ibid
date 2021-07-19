@@ -40,10 +40,10 @@ MAILGUN_SECRET="budi.220392701aaaeac235fb265a5ae56327-c485922e-46c5ac1e"
 ```
 Setelah di copy ke ```.env``` pada
 ```
-MAIL_USERNAME
-MAIL_PASSWORD
-MAILGUN_DOMAIN
-MAIL_FROM_ADDRESS
-MAILGUN_SECRET
+MAIL_USERNAME="budi.postmaster@sandboxe21523596fa144c3a137d96437ac1cf5.mailgun.org"
+MAIL_PASSWORD="budi.6014c746505911184aa9a6b095df4e19-c485922e-194f3db1"
+MAIL_FROM_ADDRESS="budi.postmaster@sandboxe21523596fa144c3a137d96437ac1cf5.mailgun.org"
+MAILGUN_DOMAIN="budi.sandboxe21523596fa144c3a137d96437ac1cf5.mailgun.org"
+MAILGUN_SECRET="budi.220392701aaaeac235fb265a5ae56327-c485922e-46c5ac1e"
 ```
-hapus semua tulisan yang mengandung ```budi.``` pada tiap awalan string
+hapus semua tulisan yang mengandung ```budi.``` pada tiap awalan string. Saya menambahkan string ```budi.``` karena sebelumnya Mailgun mendeteksi leaks of username and password

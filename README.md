@@ -38,4 +38,12 @@ MAIL_FROM_NAME="Test IBID"
 MAILGUN_DOMAIN="budi.sandboxe21523596fa144c3a137d96437ac1cf5.mailgun.org"
 MAILGUN_SECRET="budi.220392701aaaeac235fb265a5ae56327-c485922e-46c5ac1e"
 ```
-Setelah di copy ke ```.env``` pada **MAIL_USERNAME**, **MAIL_PASSWORD**, **MAILGUN_DOMAIN**, **MAIL_FROM_ADDRESS**, **MAILGUN_SECRET** hapus semua tulisan yang mengandung **budi.** pada tiap awalan string
+Setelah di copy ke ```.env``` pada
+```
+MAIL_USERNAME
+MAIL_PASSWORD
+MAILGUN_DOMAIN
+MAIL_FROM_ADDRESS
+MAILGUN_SECRET
+```
+hapus semua tulisan yang mengandung ```budi.``` pada tiap awalan string

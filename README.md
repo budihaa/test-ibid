@@ -25,3 +25,4 @@ sudo pecl install protobuf
 5. Untuk mengubah link connect sentry hanya tinggal mengganti pada file ```.env``` dan sehabis itu menjalankan command ```php artisan sentry:test```
 6. Check login untuk hit API diterapkan pada Soal no. 1 (Book API Endpoint)
 7. Dokumentasi Swagger terdapat pada base route.
+8. Konfigurasi Mailgun terlebih dahulu pada file ```.env```
